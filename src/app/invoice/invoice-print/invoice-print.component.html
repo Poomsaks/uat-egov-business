@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Invoice Print</title>
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+</head>
+
+<body>
+  <div class="wrapper" >
+    <!-- Main content -->
+    <section class="invoice" *ngFor="let detail of invoice_detail">
+      <!-- title row -->
+      <div class="row">
+        <div class="col-12">
+          <h2 class="page-header">
+            <img [src]="'data:image/jpeg;base64,'+detail['business_id'][0]?.['logo']"
+                    style="width: 90px; height: 90px;" />
+                  {{ detail['name']}}/{{ detail['name_eg']}}
+          </h2>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- info row -->
+      <div class="row invoice-info">
+        <div class="col-sm-4 invoice-col">
+          สำนักงานใหญ่
+          <address>
+            <strong>{{ detail['business_id'][0]?.['name'] }}</strong><br>
+            เลขประจำตัวผู้เสียภาษี: {{ detail['business_id'][0]?.['identification_number'] }}<br>
+            ที่อยู่: {{ detail['business_id'][0]?.['address'] }}<br>
+            เบอร์โทร: {{ detail['business_id'][0]?.['phone'] }},{{ detail['business_id'][0]?.['phone_2'] }}<br>
+            <span *ngIf="!detail['business_id'][0]?.['email']">อีเมล: -</span>
+            <span *ngIf="detail['business_id'][0]?.['email']">อีเมล: {{ detail['business_id'][0]?.['email'] }}</span>
+          </address>
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-5 invoice-col">
+          นามลูกค้า
+          <address>
+            <strong>{{ detail['customer_id'][0]?.['name'] }}</strong><br>
+            ที่อยู่: {{ detail['customer_id'][0]?.['address'] }}<br>
+            <span *ngIf="!detail['customer_id'][0]?.['phone']">เบอร์โทร: -</span>
+            <span *ngIf="detail['customer_id'][0]?.['phone']">เบอร์โทร: {{ detail['customer_id'][0]?.['phone'] }}</span>
+            <span *ngIf="detail['customer_id'][0]?.['phone_2']">,{{ detail['customer_id'][0]?.['phone_2'] }}</span><br>
+            <span *ngIf="!detail['customer_id'][0]?.['email']">อีเมล: -</span>
+            <span *ngIf="detail['customer_id'][0]?.['email']">อีเมล: {{ detail['customer_id'][0]?.['email'] }}</span>
+          </address>
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-3 invoice-col">
+          <b>เลขที่ #{{ detail['invoice_code'] }}</b><br>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+      <!-- Table row -->
+      <div class="row">
+        <div class="col-12 table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>ลำดับที่</th>
+                <th>รายการ</th>
+                <th>จำนวน</th>
+                <th>ราคา/หน่วย</th>
+                <th>ราคารวม</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let sub_detail of detail['sub_invoice_ids']; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ sub_detail.name }}</td>
+                <td>{{ sub_detail.unit }}</td>
+                <td>{{ sub_detail.value_unit | number  }}</td>
+                <td>{{ sub_detail.value | number  }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+      <br>
+      <div class="row">
+        <!-- accepted payments column -->
+        <div class="col-4">
+          <!-- <p class="lead">ผู้เสนอราคา: </p>
+          <p class="lead">วันที่: </p> -->
+        </div>
+        <div class="col-4">
+          <!-- <p class="lead">ผู้รับข้อเสนอ: </p>
+          <p class="lead">วันที่: </p> -->
+        </div>
+        <!-- /.col -->
+        <div class="col-4">
+          <!-- <p class="lead">Amount Due 2/22/2014</p> -->
+
+          <div class="table-responsive">
+            <table class="table">
+              <tr>
+                <th style="width:40%">รวมทั้งหมด:</th>
+                <td>{{detail['total'] | number }}</td>
+              </tr>
+              <tr>
+                <th>ตัวอักษร:</th>
+                <td>{{detail['total_in_thai']}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- /.col -->
+      </div>
+
+      <div class="row" style="margin-top: 10%;">
+        <!-- accepted payments column -->
+        <div class="col-6">
+          <div style="text-align: center;">
+            <p class="lead">ลงชื่อ ................................................</p>
+            <p class="lead">(...........................................................)</p>
+            <p class="lead">ผู้เสนอราคา</p>
+          </div>
+          <p class="lead" style="margin-left: 25%;">วันที่: </p>
+        </div>
+        <div class="col-6" style="text-align: center;">
+          <div style="text-align: center;">
+            <p class="lead">ลงชื่อ ................................................</p>
+            <p class="lead">(...........................................................)</p>
+
+            <p class="lead">ผู้รับข้อเสนอ: </p>
+          </div>
+
+          <p class="lead" style="margin-right: 40%;">วันที่: </p>
+        </div>
+      </div>
+
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- ./wrapper -->
+</body>
+
+</html>
